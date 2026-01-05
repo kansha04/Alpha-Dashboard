@@ -1,0 +1,24 @@
+# --- Python Basics ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments (Keep your libraries local) ---
+venv/
+env/
+.env
+
+# --- Jupyter Notebooks (The junk files VS Code creates) ---
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# --- VS Code Settings (User specific settings) ---
+.vscode/
+
+# --- OS Junk ---
+.DS_Store
+Thumbs.db
+
+# --- Security (NEVER upload API keys) ---
+keys.py
+secrets.json
