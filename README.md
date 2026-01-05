@@ -27,7 +27,7 @@ Make sure you have Python installed on your machine.
 ### Installation
 1.  Clone the repository:
     ```bash
-    git clone [https://github.com/YOUR_USERNAME/alpha-dashboard.git](https://github.com/YOUR_USERNAME/alpha-dashboard.git)
+    git clone [https://github.com/kansha04/alpha-dashboard.git](https://github.com/kansha04/alpha-dashboard.git)
     ```
 2.  Install the required packages:
     ```bash
@@ -38,6 +38,7 @@ Make sure you have Python installed on your machine.
 Run the main script from your terminal:
 ```bash
 python main.py
+```
 
 Enter a stock ticker (e.g., AAPL or BTC-USD) when prompted to see the current price.
 
