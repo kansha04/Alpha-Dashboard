@@ -19,8 +19,7 @@ def main():
         ticker = yf.Ticker(user_input)
         try:
             # Try to access ticker info to validate
-            name = ticker.info['longName']
-            print(f"{name}: ${get_price(ticker):.2f}")
+            print(f"{ticker.ticker}: ${get_price(ticker):.2f}")
         except (KeyError, Exception) as e:
             print(f"Error: '{user_input}' is not a valid stock ticker or data is unavailable.\nPlease check the ticker symbol and try again.")
 
