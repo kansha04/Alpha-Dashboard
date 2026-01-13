@@ -1,5 +1,8 @@
 import yfinance as yf
 import csv
+import pandas as pd
+import matplotlib.pyplot as plt
+
 def get_price(ticker):
     try:
         price = ticker.fast_info['last_price']
@@ -14,6 +17,20 @@ def stock_logger_csv(history):
         csv_writer.writerow(['Ticker', 'Price'])
         for ticker in history:
             csv_writer.writerow([ticker[0].ticker, ticker[1]])
+
+def generate_chart():
+    df = pd.read_csv('stock_log.csv')
+    top_5 = df.nlargest(5, 'Price')
+    tickers = top_5['Ticker']
+    prices = top_5['Price']
+
+    plt.bar(tickers, prices, width=0.5, color='green')
+    plt.xlabel('Stock Ticker')
+    plt.ylabel('Price in USD ($)')
+    plt.title('Stock Price Watchlist')
+    # display the graph
+    plt.show()
+
 
 def main():
     # enter stock ticker
@@ -41,6 +58,6 @@ def main():
         except (KeyError, Exception) as e:
             print(f"Error: '{user_input}' is not a valid stock ticker or data is unavailable.\nPlease check the ticker symbol and try again.")
     stock_logger_csv(history)
-
+    generate_chart()
 if __name__ == '__main__':
     main()
