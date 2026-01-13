@@ -19,17 +19,24 @@ def stock_logger_csv(history):
             csv_writer.writerow([ticker[0].ticker, ticker[1]])
 
 def generate_chart():
-    df = pd.read_csv('stock_log.csv')
-    top_5 = df.nlargest(5, 'Price')
-    tickers = top_5['Ticker']
-    prices = top_5['Price']
-
-    plt.bar(tickers, prices, width=0.5, color='green')
-    plt.xlabel('Stock Ticker')
-    plt.ylabel('Price in USD ($)')
-    plt.title('Stock Price Watchlist')
-    # display the graph
-    plt.show()
+    try:
+        df = pd.read_csv('stock_log.csv')
+        if df.empty:
+            print('No data to plot.')
+            return
+        df = pd.read_csv('stock_log.csv')
+        top_5 = df.nlargest(5, 'Price')
+        tickers = top_5['Ticker']
+        prices = top_5['Price']
+        # generate chart
+        plt.bar(tickers, prices, width=0.5, color='green')
+        plt.xlabel('Stock Ticker')
+        plt.ylabel('Price in USD ($)')
+        plt.title('Stock Price Watchlist')
+        # display the graph
+        plt.show()
+    except FileNotFoundError:
+        print('No data file found.')
 
 
 def main():
