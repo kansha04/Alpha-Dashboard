@@ -34,13 +34,29 @@ def generate_chart():
         plt.ylabel('Price in USD ($)')
         plt.title('Stock Price Watchlist')
         # display the graph
-        plt.show()
+        plt.show() # plt.savefig('chart.png') if we want to make the program to save it the graph to a file so it doesn't freeze the backend
     except FileNotFoundError:
         print('No data file found.')
 
 
+def plot_history(ticker, user_input):
+    monthly_data = ticker.history(period='1mo')
+    print(monthly_data.head())
+
+    # Graphing
+    plt.figure(figsize=(10, 8))
+    plt.plot(monthly_data['Close'], label='Price')
+    plt.title(f'{user_input} Price History')
+    plt.xlabel('Date')
+    plt.xticks(rotation=45)
+    plt.ylabel('Price ($)')
+    plt.legend()
+    plt.show()
+
 def main():
     # enter stock ticker
+    print("Welcome to the Alpha Dashboard!")
+    print("===============================")
     history = []
     while True:
         user_input = input("Please enter a stock ticker (eg. AAPL, MSFT): ")
@@ -62,6 +78,10 @@ def main():
             else:
                 print(f"{ticker.ticker}: ${price:.2f}")
                 history.append([ticker, price])
+                show_plot = input("Plot history? (y/n): ").lower()
+                if show_plot == 'y':
+                    plot_history(ticker, user_input)
+                    print("Graph generated.")
         except (KeyError, Exception) as e:
             print(f"Error: '{user_input}' is not a valid stock ticker or data is unavailable.\nPlease check the ticker symbol and try again.")
     stock_logger_csv(history)
