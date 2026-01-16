@@ -24,7 +24,6 @@ def generate_chart():
         if df.empty:
             print('No data to plot.')
             return
-        df = pd.read_csv('stock_log.csv')
         top_5 = df.nlargest(5, 'Price')
         tickers = top_5['Ticker']
         prices = top_5['Price']
@@ -34,7 +33,7 @@ def generate_chart():
         plt.ylabel('Price in USD ($)')
         plt.title('Stock Price Watchlist')
         # display the graph
-        plt.show() # plt.savefig('chart.png') if we want to make the program to save it the graph to a file so it doesn't freeze the backend
+        plt.show() # plt.savefig('chart.png') if we want to make the program to save the graph to a file so it doesn't freeze the backend
     except FileNotFoundError:
         print('No data file found.')
 
@@ -42,10 +41,11 @@ def generate_chart():
 def plot_history(ticker, user_input):
     monthly_data = ticker.history(period='1mo')
     print(monthly_data.head())
-
+    sma_5 = monthly_data['Close'].rolling(window=5).mean()
     # Graphing
-    plt.figure(figsize=(10, 8))
-    plt.plot(monthly_data['Close'], label='Price')
+    plt.figure(figsize=(10, 10))
+    plt.plot(monthly_data['Close'], label='Price', color='blue')
+    plt.plot(sma_5, label='5-day SMA', color='red')
     plt.title(f'{user_input} Price History')
     plt.xlabel('Date')
     plt.xticks(rotation=45)
@@ -67,6 +67,7 @@ def main():
             print("---------")
             for ticker in history:
                 print(f"{ticker[0].ticker}: {ticker[1]:.2f}")
+            generate_chart()
             break
 
         ticker = yf.Ticker(user_input)
@@ -85,6 +86,5 @@ def main():
         except (KeyError, Exception) as e:
             print(f"Error: '{user_input}' is not a valid stock ticker or data is unavailable.\nPlease check the ticker symbol and try again.")
     stock_logger_csv(history)
-    generate_chart()
 if __name__ == '__main__':
     main()
