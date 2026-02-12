@@ -2,6 +2,11 @@ import yfinance as yf
 import csv
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
+def ensure_output_dir():
+    if not os.path.exists('output'):
+        os.makedirs('output')
 
 def get_price(ticker):
     try:
@@ -10,9 +15,10 @@ def get_price(ticker):
     except (KeyError, Exception) as e:
         return None
 
-# WHen the user exits its saves history list to a CSV file (e.g., stock_log.csv).
+# WHen the user exits its saves history list to a CSV file (e.g., output/stock_log.csv).
 def stock_logger_csv(history):
-    with open('stock_log.csv', 'w', newline='') as csvfile:
+    ensure_output_dir()
+    with open('output/stock_log.csv', 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(['Ticker', 'Price'])
         for ticker in history:
@@ -20,7 +26,7 @@ def stock_logger_csv(history):
 
 def generate_chart():
     try:
-        df = pd.read_csv('stock_log.csv')
+        df = pd.read_csv('output/stock_log.csv')
         if df.empty:
             print('No data to plot.')
             return
@@ -32,8 +38,12 @@ def generate_chart():
         plt.xlabel('Stock Ticker')
         plt.ylabel('Price in USD ($)')
         plt.title('Stock Price Watchlist')
-        # display the graph
-        plt.show() # plt.savefig('chart.png') if we want to make the program to save the graph to a file so it doesn't freeze the backend
+        # display the graph (save instead of show to avoid GUI backend blocking)
+        plt.tight_layout()
+        ensure_output_dir()
+        plt.savefig('output/chart.png')
+        plt.close()
+        print("Saved bar chart to 'output/chart.png'.")
     except FileNotFoundError:
         print('No data file found.')
 
@@ -42,6 +52,10 @@ def plot_history(ticker, user_input):
     monthly_data = ticker.history(period='1mo')
     print(monthly_data.head())
     sma_5 = monthly_data['Close'].rolling(window=5).mean()
+    # print days where the close price is greater than the 5-day SMA
+    buy_signals = monthly_data['Close'] > sma_5
+    print("Buy signals:")
+    print(monthly_data[buy_signals])
     # Graphing
     plt.figure(figsize=(10, 10))
     plt.plot(monthly_data['Close'], label='Price', color='blue')
@@ -51,7 +65,13 @@ def plot_history(ticker, user_input):
     plt.xticks(rotation=45)
     plt.ylabel('Price ($)')
     plt.legend()
-    plt.show()
+    # Save instead of blocking GUI show to avoid macOS backend hang
+    plt.tight_layout()
+    ensure_output_dir()
+    out_path = os.path.join('output', f"{user_input}_history.png")
+    plt.savefig(out_path)
+    plt.close()
+    print(f"Saved history chart to '{out_path}'.")
 
 def main():
     # enter stock ticker

@@ -22,13 +22,10 @@ Alpha Dashboard is a Python-based application designed to assist in financial an
 ## 📂 Project Structure
 ```text
 .
-├── analysis.py          # Script for basic data analysis (mean price)
-├── broken-ticket.ipynb  # Experimental notebook (In Progress)
 ├── dashboard.ipynb      # Interactive dashboard notebook
-├── graph.py             # Script for visualizing top 5 stocks
+├── graph.py             # Script for visualizing graphs with matplotlib
 ├── main.py              # Main entry point (CLI)
-├── README.md            # Project documentation
-└── stock_log.csv        # Log of searched stock tickers and prices
+└── README.md        # Project Documantation
 ```
 
 ## 💻 Getting Started
